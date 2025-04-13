@@ -44,20 +44,22 @@ resource "aws_route_table" "k8s_priv_rtb" {
     }
 }
 
+resource "aws_subnet" "private_subnets" {
+  for_each = var.private_subnet_config
 
-resource "aws_subnet" "private_subnet" {
   vpc_id                  = aws_vpc.k8s_main.id
-  cidr_block              = "10.0.0.0/20"
-  availability_zone       = "eu-west-1a"
+  cidr_block              = each.value.cidr_block
+  availability_zone       = each.value.availability_zone
 
   tags = {
-    Name      = "private_subnet"
+    Name      = each.key
     Terraform = "true"
+    "kubernetes.io/role/elb" = "1"
   }
 }
 
 resource "aws_subnet" "public_subnets" {
-  for_each = var.subnet_configs
+  for_each = var.public_subnet_config
 
   vpc_id                  = aws_vpc.k8s_main.id
   cidr_block              = each.value.cidr_block
@@ -103,7 +105,9 @@ resource "aws_route_table_association" "k8s_pub_rtb_assoc" {
 }
 
 resource "aws_route_table_association" "k8s_priv_rtb_assoc" {
-  subnet_id      = aws_subnet.private_subnet.id
+  for_each = aws_subnet.private_subnets
+
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.k8s_priv_rtb.id
   
 }
