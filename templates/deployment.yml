@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fibonacci
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fib-generator
+  namespace: fibonacci
+spec:
+  selector:
+    matchLabels:
+      app: fib-generator
+  template:
+    metadata:
+      labels:
+        app: fib-generator
+    spec:
+      containers:
+        - name: fib-generator
+          image: aputra/myapp-195:v2
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 100m

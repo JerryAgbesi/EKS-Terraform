@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {}
 resource "aws_iam_role" "eks_admin_role" {
   name = "eks-admin-role-${data.aws_caller_identity.current.account_id}"
 
-  assume_role_policy = <<POLICY
+  assume_role_policy = jsonencode(
     {
         "Version": "2012-10-17",
         "Statement": [
@@ -16,13 +16,13 @@ resource "aws_iam_role" "eks_admin_role" {
         }
         ]
     }
-    POLICY  
+  ) 
 }
 
 resource "aws_iam_policy" "eks_admin" {
     name = "AmazonEKSAdminPolicy"
 
-    policy = <<POLICY
+    policy = jsonencode(
         {
             "Version": "2012-10-17",
             "Statement": [
@@ -46,27 +46,27 @@ resource "aws_iam_policy" "eks_admin" {
             }
             ]
         }
-        POLICY
+    )
   
 }
 
 resource "aws_iam_policy" "eks_assume_admin" {
     name = "AmazonEKSAssumeAdminPolicy"
 
-    policy = <<POLICY
+    policy = jsonencode(
         {
             "Version": "2012-10-17",
             "Statement": [
             {
                 "Effect": "Allow",
                 "Action": [
-                    "sts:AssumeRole",
+                    "sts:AssumeRole"
                 ],
                 "Resource": "${aws_iam_role.eks_admin_role.arn}"
             }
             ]
         }
-        POLICY
+    )
   
 }
 
@@ -102,9 +102,9 @@ resource "aws_iam_group_membership" "cluster_admin_group_membership" {
 
 #Use the EKS API to now bind the role to the kubernetes group "cluster-admins"
 resource "aws_eks_access_entry" "cluster_admin_access" {
-    cluster_name = module.eks.cluster_id
+    cluster_name = module.eks.cluster_name
     principal_arn    = aws_iam_role.eks_admin_role.arn
-    kubernetes_groups       = ["cluster-admins"]
+    kubernetes_groups  = ["cluster-admins"]
 }
 
 
