@@ -15,7 +15,7 @@ variable "public_subnet_config" {
   default = {
     public_subnet_1 = {
       cidr_block        = "10.0.32.0/20"
-      availability_zone = "eu-west-1c"
+      availability_zone = "eu-west-1b"
     }
     public_subnet_2 = {
       cidr_block        = "10.0.48.0/20"

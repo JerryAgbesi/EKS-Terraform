@@ -10,6 +10,7 @@ metadata:
   name: fib-generator
   namespace: fibonacci
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: fib-generator
@@ -26,8 +27,8 @@ spec:
               containerPort: 8080
           resources:
             requests:
-              memory: 256Mi
+              memory: 128Mi
               cpu: 100m
             limits:
-              memory: 256Mi
+              memory: 128Mi
               cpu: 100m

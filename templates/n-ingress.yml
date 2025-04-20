@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fig-generator-ingress
+  namespace: fibonacci
+  annotations:    
+    cert-manager.io/cluster-issuer: http-01-production
+spec:
+  ingressClassName: external-nginx
+  rules:
+    - host: practice-eks.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fib-generator
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - practice-eks.net
+      secretName: fib-generator-tls

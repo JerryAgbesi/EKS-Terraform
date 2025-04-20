@@ -1,7 +1,7 @@
 resource "aws_vpc" "k8s_main" {
     cidr_block = "10.0.0.0/16"
 
-    # The VPC must have DNS hostname and DNS resolution support. Otherwise, nodes can’t register to your cluster. 
+    # The VPC must have DNS hostname and DNS resolution support. Otherwise, nodes can’t register to your cluster.(Learnt this the hard way)
     # For more information, see DNS attributes for your VPC in the Amazon VPC User Guide.
     enable_dns_support = true
     enable_dns_hostnames = true
@@ -54,7 +54,6 @@ resource "aws_subnet" "private_subnets" {
   tags = {
     Name      = each.key
     Terraform = "true"
-    "kubernetes.io/role/elb" = "1"
   }
 }
 

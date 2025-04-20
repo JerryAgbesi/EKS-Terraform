@@ -5,6 +5,7 @@ metadata:
   name: fib-generator
   namespace: fibonacci
 spec:
+  type: ClusterIP
   ports:
     - port: 8080
       targetPort: http

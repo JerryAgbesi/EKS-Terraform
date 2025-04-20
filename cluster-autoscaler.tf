@@ -81,7 +81,6 @@ resource "helm_release" "cluster_autoscaler" {
     value = module.eks.cluster_name
   }
 
-  # MUST be updated to match your region 
   set {
     name  = "awsRegion"
     value = "eu-west-1"
