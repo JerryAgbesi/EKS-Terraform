@@ -11,7 +11,6 @@ resource "helm_release" "cert-manager" {
       value = "true"
     }
     
-    
     depends_on = [
         helm_release.nginx-ingress
     ]

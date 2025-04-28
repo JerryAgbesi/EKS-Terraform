@@ -1,0 +1,4 @@
+---
+config:
+  params:
+    insecure: true
